@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const colorButtons = document.querySelectorAll('.color-btn');
     const fontSelect = document.querySelector('.font-select');
     const layoutRadios = document.querySelectorAll('input[name="layout"]');
-    const footer = document.querySelector('.footer');
     
 
     // Initialize all preferences
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar.classList.toggle('collapsed');        
         footer.classList.toggle('expand');
         savePreference('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-        savePreference('footerExpanded', footer.classList.contains('expand'));
     });
 
     // Submenu Toggle
@@ -245,4 +243,42 @@ document.querySelectorAll('.nav-pills .nav-link').forEach(tab => {
     tab.addEventListener('click', function() {
         localStorage.setItem('settingsTab', this.getAttribute('href'));
     });
+});
+
+// Footer initialization
+function initFooter() {
+    // Update current year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    // Add version number (optional)
+    const version = '1.0.0';
+    const versionElement = document.createElement('span');
+    versionElement.className = 'ms-2 text-muted';
+    versionElement.textContent = `v${version}`;
+    document.querySelector('.footer-copyright').appendChild(versionElement);
+    
+    // Handle responsive behavior
+    function handleFooterPosition() {
+        const footer = document.querySelector('.dashboard-footer');
+        const mainContent = document.querySelector('.main-content');
+        
+        if (window.innerWidth < 992) {
+            footer.style.position = 'static';
+            mainContent.style.paddingBottom = '0';
+        } else {
+            footer.style.position = 'fixed';
+            mainContent.style.paddingBottom = footer.offsetHeight + 'px';
+        }
+    }
+    
+    // Initial call
+    handleFooterPosition();
+    
+    // Update on resize
+    window.addEventListener('resize', handleFooterPosition);
+}
+
+// Call when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initFooter();
 });
